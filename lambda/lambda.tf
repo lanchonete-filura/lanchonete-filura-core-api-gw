@@ -1,5 +1,5 @@
 provider "aws" {
-  region = provider.aws.region
+  region = "us-east-1"
 }
 
 resource "aws_lambda_function" "example_lambda" {
@@ -26,6 +26,11 @@ resource "aws_iam_role" "lambda_role" {
   })
 }
 
+resource "aws_iam_policy_attachment" "lambda_attachment" {
+  policy_arn = aws_iam_policy.lambda_policy.arn
+  roles      = [aws_iam_role.lambda_role.name]
+}
+
 resource "aws_iam_policy" "lambda_policy" {
   name        = "example-lambda-policy"
   description = "Policy for example Lambda"
@@ -43,9 +48,4 @@ resource "aws_iam_policy" "lambda_policy" {
       }
     ]
   })
-}
-
-resource "aws_iam_policy_attachment" "lambda_attachment" {
-  policy_arn = aws_iam_policy.lambda_policy.arn
-  roles      = [aws_iam_role.lambda_role.name]
 }

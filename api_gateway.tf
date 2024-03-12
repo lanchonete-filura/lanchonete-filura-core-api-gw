@@ -49,5 +49,5 @@ resource "aws_api_gateway_integration_response" "example_integration_response" {
 }
 
 output "api_gateway_url" {
-  value = aws_api_gateway_rest_api.example_api.invoke_url
+  value = aws_api_gateway_rest_api.example_api.endpoint_configuration[0].types[0]
 }
