@@ -1,5 +1,13 @@
 provider "aws" {
-  region = provider.aws_region
+  region = provider.aws.region
+}
+
+resource "aws_lambda_function" "example_lambda" {
+  filename      = "${path.module}/main.py"
+  function_name = "exampleLambda"
+  role          = aws_iam_role.lambda_role.arn
+  handler       = "main.lambda_handler"
+  runtime       = "python3.8"
 }
 
 resource "aws_iam_role" "lambda_role" {
@@ -37,7 +45,7 @@ resource "aws_iam_policy" "lambda_policy" {
   })
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_attachment" {
+resource "aws_iam_policy_attachment" "lambda_attachment" {
   policy_arn = aws_iam_policy.lambda_policy.arn
-  role       = aws_iam_role.lambda_role.name
+  roles      = [aws_iam_role.lambda_role.name]
 }
